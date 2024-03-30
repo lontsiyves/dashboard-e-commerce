@@ -5,7 +5,9 @@ import { Link } from "react-router-dom";
 
 export default function ProductList() {
   const [products, setProduct] = useState([]);
+
   const [records, setRecords] = useState([]);
+
   const [ordre, setOrdre] = useState("ASC");
 
   const [search, setSearch] = useState("");
@@ -41,6 +43,14 @@ export default function ProductList() {
     }
   };
 
+  const deleteP = async (id) => {
+    fetch(`https://fakestoreapi.com/products/${id}`, {
+      method: "DELETE",
+    })
+      .then((res) => res.json())
+      .then((json) => console.log(json));
+  };
+
   useEffect(() => {
     fetch("https://fakestoreapi.com/products")
       .then((res) => {
@@ -53,7 +63,6 @@ export default function ProductList() {
         return res;
       })
       .then((data) => {
-        console.log(data);
         setProduct(data);
         setRecords(data);
         setLoading(false);
@@ -145,8 +154,12 @@ export default function ProductList() {
 
                             <td>
                               {" "}
-                              <i className="fas fa-fw fa-edit" />{" "}
-                              <i className="fas fa-fw fa-trash" />
+                              <Link to={`/products/${item.id}/edit`}>
+                                <i className="fas fa-fw fa-edit" />{" "}
+                              </Link>
+                              <span onClick={() => deleteP(item.id)}>
+                                <i className="fas fa-fw fa-trash" />
+                              </span>
                             </td>
                           </tr>
                         );
