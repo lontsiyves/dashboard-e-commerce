@@ -1,22 +1,20 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Header from "./Components/Partial/Header";
-import Footer from "./Components/Partial/Footer";
-import SideNavBar from "./Components/Partial/SideNavBar";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home";
+import ProductList from "./Pages/ProductList";
+import MainLayout from "./components/layouts/MainLayout";
+import ProductDetail from './Pages/ProductDetail'
+
 
 function App() {
   return (
-    <div className="App">
-      <div id="wrapper">
-        <SideNavBar />
-        <div id="content-wrapper" className="d-flex flex-column">
-          <div id="content">
-            <Header />
-            <Home />
-          </div>
-        </div>
-      </div>
-    </div>
+    <MainLayout>
+      <Routes>
+        <Route path="/" element={<Home />} exact/>
+        <Route path="/products" element={<ProductList />} />
+        <Route path="/products/:id" element={<ProductDetail />} />
+        
+      </Routes>
+    </MainLayout>
   );
 }
 
