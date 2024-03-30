@@ -1,18 +1,17 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./Pages/Home";
-import MainLayout from "./components/MainLayout"
+import ProductList from "./Pages/ProductList";
+import MainLayout from "./components/layouts/MainLayout";
+
 
 function App() {
   return (
-    <Router>
-      <MainLayout>
-        <Routes>
-          <Route exact path="/">
-            <Home />
-          </Route>
-        </Routes>
-      </MainLayout>
-    </Router>
+    <MainLayout>
+      <Routes>
+        <Route path="/" element={<Home />} exact/>
+        <Route path="/products" element={<ProductList />} />
+      </Routes>
+    </MainLayout>
   );
 }
 

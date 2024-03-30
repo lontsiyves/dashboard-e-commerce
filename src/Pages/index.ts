@@ -1,3 +1,5 @@
 import Home from "./Home";
+import ProductList from "./ProductList";
 
-export { Home };
+
+export default { Home, ProductList };
