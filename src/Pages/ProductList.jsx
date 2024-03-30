@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import Loading from "../components/atoms/Loading";
+import { Link } from "react-router-dom";
 
 export default function ProductList() {
   const [products, setProduct] = useState([]);
@@ -45,16 +46,19 @@ export default function ProductList() {
       .then((res) => {
         return res.json();
       })
-      .then((json) =>{
-        const res = json.sort((a,b) => a.title.toLowerCase().localeCompare(b.title.toLowerCase()))
+      .then((json) => {
+        const res = json.sort((a, b) =>
+          a.title.toLowerCase().localeCompare(b.title.toLowerCase())
+        );
         return res;
       })
       .then((data) => {
+        console.log(data);
         setProduct(data);
         setRecords(data);
         setLoading(false);
       })
-      .finally(()=>{
+      .finally(() => {
         setLoading(false);
       });
   }, []);
@@ -111,26 +115,15 @@ export default function ProductList() {
                     <tr>
                       <th>Nom</th>
                       <th>Categorie</th>
-                      <th>
-                        <button
-                          className="price_btn"
-                          onClick={() => sortByPrice()}
-                        >
-                          Prix
-                          <span className="icons descending_icon">&nbsp;↑</span>
-                        </button>
+                      <th className="cursor" onClick={() => sortByPrice()}>
+                        Prix
+                        <span>&nbsp;↑</span>
+                        <span>&nbsp;↓</span>
                       </th>
+                      <th>Notation</th>
                       <th>Action</th>
                     </tr>
                   </thead>
-                  <tfoot>
-                    <tr>
-                      <th>Nom</th>
-                      <th>Categorie</th>
-                      <th>Prix</th>
-                      <th>Action</th>
-                    </tr>
-                  </tfoot>
                   <tbody>
                     {filterProducts
                       .filter((item) => {
@@ -141,9 +134,15 @@ export default function ProductList() {
                       .map((item, index) => {
                         return (
                           <tr key={index}>
-                            <td>{item.title}</td>
+                            <td>
+                              <Link to={`/products/${item.id}`}>
+                                {item.title}
+                              </Link>
+                            </td>
                             <td>{item.category}</td>
                             <td>{item.price}</td>
+                            <td>{item.rating.rate}</td>
+
                             <td>
                               {" "}
                               <i className="fas fa-fw fa-edit" />{" "}
