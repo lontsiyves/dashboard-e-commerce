@@ -23,7 +23,6 @@ export default function SideNavBar() {
         </a>
       </li>
       <hr className="sidebar-divider" />
-      <hr className="sidebar-divider" />
       <li className="nav-item">
         <a
           className="nav-link collapsed"
@@ -46,7 +45,7 @@ export default function SideNavBar() {
             <a className="collapse-item" href="/products">
               Liste
             </a>
-            <a className="collapse-item" href="register.html">
+            <a className="collapse-item" href="/products/add">
               Ajouter
             </a>
           </div>

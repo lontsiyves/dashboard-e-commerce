@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
 
 import EditProductForm from "../components/atoms/EditProductForm";
 import Loading from "../components/atoms/Loading";
-
+import { ErrorNotify,SuccessNotify } from "../lib/notify";
 export default function ProductEditPage() {
   const { id } = useParams();
 
@@ -11,59 +12,77 @@ export default function ProductEditPage() {
 
   const [category, setCategory] = useState(null);
 
-  console.log("params: ", id);
+  useEffect(() => {
+    fetch(`${process.env.REACT_APP_API_URL}/products/${id}`)
+      .then((response) => response.json())
+      .then((data) => {
+        setProduct(data);
+      });
+  }, [id]);
 
   useEffect(() => {
-    fetch(`https://fakestoreapi.com/products/${id}`)
-      .then((res) => res.json())
-      .then((json) => {
-        setProduct(json);
+    fetch(`${process.env.REACT_APP_API_URL}/products/categories`)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error("Something went wrong");
+      })
+      .then((data) => setCategory(data))
+      .catch((error) => {
+        ErrorNotify(error);
+        console.error(error);
       });
   }, []);
 
-  useEffect(() => {
-    fetch("https://fakestoreapi.com/products/categories")
-      .then((res) => res.json())
-      .then((json) => setCategory(json));
-  }, []);
-
-  const handleSave = (editedProduct) => {
-    // Here you would typically send the updated product data to the server
-    console.log("Updated product:", editedProduct);
-
-    fetch(`https://fakestoreapi.com/products/${id}`, {
+  const handleSave = ({ title, price, description, image, category }) => {
+    fetch(`${process.env.REACT_APP_API_URL}/products/${id}`, {
       method: "PUT",
       body: JSON.stringify({
-        title: editedProduct.title,
-        price: editedProduct.price,
-        description: editedProduct.description,
-        image: editedProduct.image,
-        category: editedProduct.category,
+        title,
+        price,
+        description,
+        image,
+        category,
       }),
     })
-      .then((res) => res.json())
-      .then((json) => console.log(json));
+      .then((response) => {
+        if (response.ok) {
+          SuccessNotify('Success');
+          console.log(" EDIT RESP: ", response)
+          return response.json();
+        }
+        throw new Error("Something went wrong");
+      })
+      .then((data) => console.log(data))
+      .catch((error) => {
+        ErrorNotify(error);
+        console.error(error);
+      });
   };
 
   return (
-    <div>
-      <h2>Edit Product {id}</h2>
+    <div className="container-fluid">
+      <div>
+        <h2 className="text-primary">Mise à jour :</h2>
+        <h4> {product?.title}</h4>
 
-      {product ? (
-        <EditProductForm
-          product={product}
-          categories={category}
-          onSave={handleSave}
-        />
-      ) : (
-        <Loading
-          type={"spokes"}
-          color={"#000000"}
-          width={"20%"}
-          height={"20%"}
-          className={"4e73df"}
-        />
-      )}
+        {product ? (
+          <EditProductForm
+            product={product}
+            categories={category}
+            onSave={handleSave}
+          />
+        ) : (
+          <Loading
+            type={"spokes"}
+            color={"#4e73df"}
+            width={"20%"}
+            height={"20%"}
+          />
+        )}
+      </div>{" "}
+      <ToastContainer />
     </div>
   );
 }

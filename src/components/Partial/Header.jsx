@@ -9,7 +9,7 @@ export default function Header() {
       >
         <i className="fa fa-bars" />
       </button>
- 
+
       <ul className="navbar-nav ml-auto">
         <li className="nav-item dropdown no-arrow d-sm-none">
           <a

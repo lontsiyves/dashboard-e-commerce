@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import Loading from "../components/atoms/Loading";
-import { Link } from "react-router-dom";
+//import { Link } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import ProductListTable from '../components/atoms/ProductListTable'
 
-export default function ProductList() {
+import { ErrorNotify } from "../lib/notify";
+
+export default function ProductListPage() {
   const [products, setProduct] = useState([]);
 
-  const [records, setRecords] = useState([]);
+  //const [records, setRecords] = useState([]);
 
   const [ordre, setOrdre] = useState("ASC");
 
@@ -16,7 +20,7 @@ export default function ProductList() {
 
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  const categories = Array.from(new Set(products.map((res) => res.category)));
+  const categories = Array.from(new Set(products.map((response) => response.category)));
 
   const categoryOptions = categories.map((category) => ({
     value: category,
@@ -43,32 +47,48 @@ export default function ProductList() {
     }
   };
 
-  const deleteP = async (id) => {
-    fetch(`https://fakestoreapi.com/products/${id}`, {
+  const deleteProduct = async (id) => {
+    fetch(`${process.env.REACT_APP_API_URL}/products/${id}`, {
       method: "DELETE",
     })
-      .then((res) => res.json())
-      .then((json) => console.log(json));
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error("Something went wrong");
+      })
+      .then((data) => console.log(data))
+      .catch((error) => {
+        ErrorNotify(error);
+        console.error(error);
+      });
   };
 
   useEffect(() => {
-    fetch("https://fakestoreapi.com/products")
-      .then((res) => {
-        return res.json();
+    fetch(`${process.env.REACT_APP_API_URL}/products`)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error("Something went wrong");
       })
-      .then((json) => {
-        const res = json.sort((a, b) =>
+      .then((data) => {
+        const response = data.sort((a, b) =>
           a.title.toLowerCase().localeCompare(b.title.toLowerCase())
         );
-        return res;
+        return response;
       })
       .then((data) => {
         setProduct(data);
-        setRecords(data);
+       // setRecords(data);
         setLoading(false);
       })
       .finally(() => {
         setLoading(false);
+      })
+      .catch((error) => {
+        ErrorNotify(error);
+        console.error(error);
       });
   }, []);
 
@@ -84,7 +104,7 @@ export default function ProductList() {
         {loading ? (
           <Loading
             type={"spokes"}
-            color={"#000000"}
+            color={"#4e73df"}
             width={"20%"}
             height={"20%"}
             className={"4e73df"}
@@ -114,7 +134,13 @@ export default function ProductList() {
 
             <div className="card-body">
               <div className="table-responsive">
-                <table
+                <ProductListTable  data={filterProducts}
+                search={search}
+                itemsPerPage={5}
+                 deleteProduct={deleteProduct}
+                 sortByPrice={sortByPrice} 
+              />
+                {/*<table
                   className="table table-bordered"
                   id="dataTable"
                   width="100%"
@@ -157,7 +183,7 @@ export default function ProductList() {
                               <Link to={`/products/${item.id}/edit`}>
                                 <i className="fas fa-fw fa-edit" />{" "}
                               </Link>
-                              <span onClick={() => deleteP(item.id)}>
+                              <span onClick={() => deleteProduct(item.id)}>
                                 <i className="fas fa-fw fa-trash" />
                               </span>
                             </td>
@@ -165,12 +191,13 @@ export default function ProductList() {
                         );
                       })}
                   </tbody>
-                </table>
+                </table>*/}
               </div>
             </div>
           </div>
         )}
       </div>
+      <ToastContainer />
     </div>
   );
 }

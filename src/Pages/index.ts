@@ -1,5 +1,5 @@
 import Home from "./Home";
-import ProductList from "./ProductList";
+import ProductListPage from "./ProductListPage";
 
 
-export default { Home, ProductList };
+export default { Home, ProductListPage };
