@@ -3,7 +3,6 @@ import React from "react";
 export default function Home() {
   return (
     <div className="container-fluid">
-      {/* Page Heading */}
       <div className="d-sm-flex align-items-center justify-content-between mb-4">
         <h1 className="h3 mb-0 text-gray-800">Dashboard</h1>
         <a
@@ -35,7 +34,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-        {/* Earnings (Monthly) Card Example */}
         <div className="col-xl-3 col-md-6 mb-4">
           <div className="card border-left-success shadow h-100 py-2">
             <div className="card-body">
@@ -55,7 +53,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-        {/* Earnings (Monthly) Card Example */}
         <div className="col-xl-3 col-md-6 mb-4">
           <div className="card border-left-info shadow h-100 py-2">
             <div className="card-body">
@@ -91,7 +88,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-        {/* Pending Requests Card Example */}
         <div className="col-xl-3 col-md-6 mb-4">
           <div className="card border-left-warning shadow h-100 py-2">
             <div className="card-body">
@@ -112,12 +108,9 @@ export default function Home() {
           </div>
         </div>
       </div>
-      {/* Content Row */}
       <div className="row">
-        {/* Area Chart */}
         <div className="col-xl-8 col-lg-7">
           <div className="card shadow mb-4">
-            {/* Card Header - Dropdown */}
             <div className="card-header py-3 d-flex flex-row align-items-center justify-content-between">
               <h6 className="m-0 font-weight-bold text-primary">
                 Earnings Overview
@@ -152,7 +145,6 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            {/* Card Body */}
             <div className="card-body">
               <div className="chart-area">
                 <canvas id="myAreaChart" />
@@ -160,7 +152,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-        {/* Pie Chart */}
         <div className="col-xl-4 col-lg-5">
           <div className="card shadow mb-4">
             {/* Card Header - Dropdown */}

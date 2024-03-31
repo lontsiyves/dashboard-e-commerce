@@ -1,11 +1,21 @@
 import React, { useState } from "react";
 import Select from "react-select";
-import ImageUpload from "./ImageUpload";
+import UploadFileInput from "./UploadFileInput";
 
 const EditProductForm = ({ product, categories, onSave }) => {
   const [editedProduct, setEditedProduct] = useState(product);
 
   const [selectedCategory, setSelectedCategory] = useState(product.category);
+
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const handleFileChange = (file) => {
+    setSelectedFile(file);
+    const { image, value } = file;
+    setEditedProduct({ ...editedProduct, [image]: value });
+    console.log('editedProduct: ',editedProduct)
+
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -77,11 +87,26 @@ const EditProductForm = ({ product, categories, onSave }) => {
                           onChange={handleInputChange}
                         ></textarea>
                       </div>
-                      <ImageUpload />
 
-                     <div className="my-3">
-                      <button className="btn btn-primary btn-user btn-block" type="submit">Enregistrer</button>
-                     </div>
+                      <div className="form-group">
+                        <label htmlFor="description">Upload File:</label>
+                        <UploadFileInput onChange={handleFileChange} />
+                        {selectedFile && (
+                          <div>
+                            <h3>Selected File:</h3>
+                            <p>Name: {selectedFile.name}</p>
+                          </div>
+                        )}
+                      </div>
+
+                      <div className="my-3">
+                        <button
+                          className="btn btn-primary btn-user"
+                          type="submit"
+                        >
+                          Enregistrer
+                        </button>
+                      </div>
                     </form>
                   </div>
                 </div>
@@ -90,6 +115,7 @@ const EditProductForm = ({ product, categories, onSave }) => {
                     <img
                       width={300}
                       height={300}
+                      loading="eager|lazy"
                       src={product.image}
                       className="rounded mx-auto d-block"
                       alt={product.title}
