@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 //import { ErrorNotify } from "../lib/notify";
 
-import AddProductForm from "../components/atoms/AddProductForm";
+import AddProductForm from "../components/module/AddProductForm";
 
 export default function AddProductPge() {
   const [category, setCategory] = useState(null);

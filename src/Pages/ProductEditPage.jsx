@@ -2,21 +2,35 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 
-import EditProductForm from "../components/atoms/EditProductForm";
+import EditProductForm from "../components/module/EditProductForm";
+
 import Loading from "../components/atoms/Loading";
-import { ErrorNotify,SuccessNotify } from "../lib/notify";
+
+import { ErrorNotify, SuccessNotify } from "../lib/notify";
+
 export default function ProductEditPage() {
+
   const { id } = useParams();
 
   const [product, setProduct] = useState();
 
-  const [category, setCategory] = useState(null);
+  const [categories, setCategories] = useState(null);
+
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API_URL}/products/${id}`)
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        throw new Error("Un problème est survenu");
+      })
       .then((data) => {
         setProduct(data);
+      })
+      .catch((error) => {
+        ErrorNotify(error);
       });
   }, [id]);
 
@@ -26,16 +40,22 @@ export default function ProductEditPage() {
         if (response.ok) {
           return response.json();
         }
-        throw new Error("Something went wrong");
+        throw new Error("Un problème est survenu");
       })
-      .then((data) => setCategory(data))
+      .then((data) => {
+        setLoading(false);
+        setCategories(data);
+      })
       .catch((error) => {
         ErrorNotify(error);
-        console.error(error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
   const handleSave = ({ title, price, description, image, category }) => {
+    setLoading(true);
     fetch(`${process.env.REACT_APP_API_URL}/products/${id}`, {
       method: "PUT",
       body: JSON.stringify({
@@ -48,16 +68,17 @@ export default function ProductEditPage() {
     })
       .then((response) => {
         if (response.ok) {
-          SuccessNotify('Success');
-          console.log(" EDIT RESP: ", response)
+          SuccessNotify("Sauvegarde réussie");
+          setLoading(false);
           return response.json();
         }
-        throw new Error("Something went wrong");
+        throw new Error("Un problème est survenu");
       })
       .then((data) => console.log(data))
-      .catch((error) => {
-        ErrorNotify(error);
-        console.error(error);
+      .catch(() => {
+        ErrorNotify("Un problème est survenu");
+      }).finally(()=>{
+        setLoading(false);
       });
   };
 
@@ -67,11 +88,11 @@ export default function ProductEditPage() {
         <h2 className="text-primary">Mise à jour :</h2>
         <h4> {product?.title}</h4>
 
-        {product ? (
+        {!loading ? (
           <EditProductForm
             product={product}
-            categories={category}
-            onSave={handleSave}
+            categories={categories}
+            onSubmit={handleSave}
           />
         ) : (
           <Loading

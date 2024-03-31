@@ -29,16 +29,21 @@ export default function AddProductForm({ categories, onSubmit }) {
           .required("Requis")
           .positive("Doit être un nombre positif"),
       })}
-
-
-      
       onSubmit={(values, { resetForm }) => {
-        console.log("values: ",values)
+        console.log("values: ", values);
         onSubmit(values);
         resetForm();
       }}
     >
-      {({ setFieldValue, isSubmitting, submitForm, isValid, dirty, errors, values }) => (
+      {({
+        setFieldValue,
+        isSubmitting,
+        submitForm,
+        isValid,
+        dirty,
+        errors,
+        values,
+      }) => (
         <Form>
           <div className="container">
             <div className="row justify-content-center">
@@ -125,14 +130,16 @@ export default function AddProductForm({ categories, onSubmit }) {
                           />
                         </div>
 
-                        <button 
+                        <button
                           disabled={!isValid || !dirty || isSubmitting}
-                          type='submit'
-                          fluidsize='large'
-                          color='teal'
-                          content='Submit'
+                          type="submit"
+                          fluidsize="large"
+                          color="teal"
+                          content="Submit"
                           onClick={submitForm}
-                        >Add Product</button>
+                        >
+                          Add Product
+                        </button>
                       </div>
                     </div>
                   </div>

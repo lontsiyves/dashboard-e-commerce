@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import Select from "react-select";
-import Loading from "../components/atoms/Loading";
-//import { Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import ProductListTable from '../components/atoms/ProductListTable'
+import { Link } from "react-router-dom";
 
-import { ErrorNotify } from "../lib/notify";
+import ProductListTable from "../components/module/ProductListTable";
+import Loading from "../components/atoms/Loading";
+import { ErrorNotify, SuccessNotify } from "../lib/notify";
 
 export default function ProductListPage() {
   const [products, setProduct] = useState([]);
 
-  //const [records, setRecords] = useState([]);
+  const [records, setRecords] = useState([]);
 
   const [ordre, setOrdre] = useState("ASC");
 
@@ -18,9 +18,12 @@ export default function ProductListPage() {
 
   const [loading, setLoading] = useState(true);
 
+
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  const categories = Array.from(new Set(products.map((response) => response.category)));
+  const categories = Array.from(
+    new Set(products.map((response) => response.category))
+  );
 
   const categoryOptions = categories.map((category) => ({
     value: category,
@@ -47,20 +50,56 @@ export default function ProductListPage() {
     }
   };
 
-  const deleteProduct = async (id) => {
-    fetch(`${process.env.REACT_APP_API_URL}/products/${id}`, {
+  const sortByRating = async () => {
+    if (ordre === "ASC") {
+      const sorted = [...filterProducts].sort((a, b) =>
+        a.rating.rate > b.rating.rate ? 1 : -1
+      );
+      setProduct(sorted);
+      setOrdre("DSC");
+    } else {
+      const sorted = [...filterProducts].sort((a, b) =>
+        b.reting.rate > a.rating.rate ? 1 : -1
+      );
+      setProduct(sorted);
+      setOrdre("ASC");
+    }
+  };
+
+  const sortByName = async () => {
+    if (ordre === "ASC") {
+      const sorted = [...filterProducts].sort((a, b) =>
+        a.title.toLowerCase().localeCompare(b.title.toLowerCase())
+      );
+      setProduct(sorted);
+      setOrdre("DSC");
+    } else {
+      const sorted = [...filterProducts].sort((a, b) =>
+        b.title.toLowerCase().localeCompare(a.title.toLowerCase())
+      );
+      setProduct(sorted);
+      setOrdre("ASC");
+    }
+  };
+
+  const deleteProduct = async (productId) => {
+    setLoading(true);
+    fetch(`${process.env.REACT_APP_API_URL}/products/${productId}`, {
       method: "DELETE",
     })
       .then((response) => {
         if (response.ok) {
+          SuccessNotify("Supprimé avec succès");
+          setLoading(false);
           return response.json();
         }
         throw new Error("Something went wrong");
       })
-      .then((data) => console.log(data))
       .catch((error) => {
         ErrorNotify(error);
         console.error(error);
+      }).finally(()=>{
+        setLoading(false);
       });
   };
 
@@ -72,23 +111,23 @@ export default function ProductListPage() {
         }
         throw new Error("Something went wrong");
       })
-      .then((data) => {
+      /* .then((data) => {
         const response = data.sort((a, b) =>
           a.title.toLowerCase().localeCompare(b.title.toLowerCase())
         );
         return response;
-      })
+      })*/
       .then((data) => {
         setProduct(data);
-       // setRecords(data);
-        setLoading(false);
-      })
-      .finally(() => {
+        setRecords(data);
         setLoading(false);
       })
       .catch((error) => {
         ErrorNotify(error);
         console.error(error);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }, []);
 
@@ -99,7 +138,9 @@ export default function ProductListPage() {
           <h6 className="m-0 font-weight-bold text-primary">
             Liste des Produits
           </h6>
+
         </div>
+
 
         {loading ? (
           <Loading
@@ -109,7 +150,11 @@ export default function ProductListPage() {
             height={"20%"}
             className={"4e73df"}
           />
-        ) : (
+        ) : (null
+        )}
+
+        {filterProducts.length >0  ? (
+          
           <div>
             <form className="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search py-2">
               <div className="input-group">
@@ -131,70 +176,24 @@ export default function ProductListPage() {
                 />
               </div>
             </form>
+            <Link className="btn btn-primary" to={"/products/add"} >Ajouter Produit</Link>
 
             <div className="card-body">
               <div className="table-responsive">
-                <ProductListTable  data={filterProducts}
-                search={search}
-                itemsPerPage={5}
-                 deleteProduct={deleteProduct}
-                 sortByPrice={sortByPrice} 
-              />
-                {/*<table
-                  className="table table-bordered"
-                  id="dataTable"
-                  width="100%"
-                  cellSpacing={0}
-                >
-                  <thead>
-                    <tr>
-                      <th>Nom</th>
-                      <th>Categorie</th>
-                      <th className="cursor" onClick={() => sortByPrice()}>
-                        Prix
-                        <span>&nbsp;↑</span>
-                        <span>&nbsp;↓</span>
-                      </th>
-                      <th>Notation</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filterProducts
-                      .filter((item) => {
-                        return search.toLowerCase() === ""
-                          ? item
-                          : item.title.toLowerCase().includes(search);
-                      })
-                      .map((item, index) => {
-                        return (
-                          <tr key={index}>
-                            <td>
-                              <Link to={`/products/${item.id}`}>
-                                {item.title}
-                              </Link>
-                            </td>
-                            <td>{item.category}</td>
-                            <td>{item.price}</td>
-                            <td>{item.rating.rate}</td>
-
-                            <td>
-                              {" "}
-                              <Link to={`/products/${item.id}/edit`}>
-                                <i className="fas fa-fw fa-edit" />{" "}
-                              </Link>
-                              <span onClick={() => deleteProduct(item.id)}>
-                                <i className="fas fa-fw fa-trash" />
-                              </span>
-                            </td>
-                          </tr>
-                        );
-                      })}
-                  </tbody>
-                </table>*/}
+                <ProductListTable
+                  data={filterProducts}
+                  search={search}
+                  itemsPerPage={5}
+                  deleteProduct={deleteProduct}
+                  sortByPrice={sortByPrice}
+                  sortByRating={sortByRating}
+                  sortByName={sortByName}
+                />
               </div>
             </div>
           </div>
+        ):(
+          <div>la liste est vide</div>
         )}
       </div>
       <ToastContainer />

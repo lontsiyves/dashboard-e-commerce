@@ -3,7 +3,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import { useParams } from "react-router-dom";
-import Product from "../components/atoms/Product";
+import Product from "../components/molecule/Product";
 import Loading from "../components/atoms/Loading";
 import { ErrorNotify } from "../lib/notify";
 
