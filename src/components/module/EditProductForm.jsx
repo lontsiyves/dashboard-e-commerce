@@ -6,10 +6,6 @@ import * as Yup from "yup";
 const EditProductForm = ({ product, categories, onSubmit }) => {
   const [selectedCategory, setSelectedCategory] = useState(product.category);
 
-  const categoryOptions = categories?.map((category) => ({
-    value: category,
-    label: category,
-  }));
   const defaultCategoryValue = {
     value: selectedCategory,
     label: selectedCategory,
@@ -94,7 +90,7 @@ const EditProductForm = ({ product, categories, onSubmit }) => {
                             onChange={(selectOption) =>
                               setSelectedCategory(selectOption)
                             }
-                            options={categoryOptions}
+                            options={categories}
                             className="w-100 mx-0 mb-4"
                           />
 
@@ -122,7 +118,6 @@ const EditProductForm = ({ product, categories, onSubmit }) => {
                               type="file"
                               onChange={(event) => {
                                 if (event.target.files.length > 0) {
-                                  console.log("URL: ",URL)
                                   const lien = URL.createObjectURL(
                                     event.target.files[0]
                                   );

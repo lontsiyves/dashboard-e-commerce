@@ -1,57 +1,57 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
-//import { ErrorNotify } from "../lib/notify";
+import { useDispatch } from "react-redux";
+import { FunctionAddProduct } from "../Store/Action";
+import { connect } from "react-redux";
+
+import { fetchcategories } from "../Store/Action";
 
 import AddProductForm from "../components/module/AddProductForm";
+import { useNavigate } from "react-router-dom";
 
-export default function AddProductPge() {
-  const [category, setCategory] = useState(null);
+const AddProductPge = (props) => {
+  useEffect(() => {
+    props.loadcategories();
+  }, []);
+
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
 
   const handleAddProduct = ({ title, price, description, image, category }) => {
-    console.log("title: ",title)
-    /*fetch(`${process.env.REACT_APP_API_URL}/products/`, {
-      method: "POST",
-      body: JSON.stringify({
-        title,
-        price,
-        description,
-        image,
-        category,
-      }),
-    })
-      .then((res) => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw new Error("Something went wrong");
-      })
-      .then((json) => console.log(json))
-      .catch((error) => {
-        ErrorNotify(error);
-      });*/
-  };
 
-  useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/products/categories`)
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error("Something went wrong");
-      })
-      .then((data) => setCategory(data))
-      .catch((error) => {
-        console.error(error);
-      });
-  }, []);
+    dispatch(
+      FunctionAddProduct({ title, price, description, image, category })
+    );
+    navigate("/product");
+  };
 
   return (
     <div className="container-fluid">
       <div>
         <h2>Ajouter un produit</h2>
-        <AddProductForm categories={category} onSubmit={handleAddProduct} />
+        <AddProductForm
+          categories={props.products.categorielist}
+          onSubmit={handleAddProduct}
+        />
       </div>
       <ToastContainer />
     </div>
   );
-}
+};
+
+const mapStateToProps = (state) => {
+  return {
+    products: state.products,
+    loading: state.loading,
+    error: state.error,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loadcategories: () => dispatch(fetchcategories()),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddProductPge);

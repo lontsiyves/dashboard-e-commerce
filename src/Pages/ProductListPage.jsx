@@ -2,134 +2,74 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import { ToastContainer } from "react-toastify";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 
 import ProductListTable from "../components/module/ProductListTable";
 import Loading from "../components/atoms/Loading";
-import { ErrorNotify, SuccessNotify } from "../lib/notify";
+import { SuccessNotify } from "../lib/notify";
+import {  } from "react-redux";
+import { fetchProducts, removeProduct, fetchcategories,sortByPrice ,sortByRating,sortName} from "../Store/Action";
 
-export default function ProductListPage() {
-  const [products, setProduct] = useState([]);
+const ProductListPage = (props) => {
+  useEffect(() => {
+    props.loadproduct();
+  }, []);
+  useEffect(() => {
+    props.loadcategories();
+  }, []);
 
-  const [records, setRecords] = useState([]);
+  const [products, setProduct] = useState(props.products.productlist);
 
   const [ordre, setOrdre] = useState("ASC");
 
   const [search, setSearch] = useState("");
 
-  const [loading, setLoading] = useState(true);
-
-
   const [selectedCategory, setSelectedCategory] = useState(null);
 
-  const categories = Array.from(
-    new Set(products.map((response) => response.category))
-  );
-
-  const categoryOptions = categories.map((category) => ({
-    value: category,
-    label: category,
-  }));
-
   const filterProducts = selectedCategory
-    ? products.filter((p) => p.category === selectedCategory.value)
-    : products;
+    ? props?.products?.productlist?.filter(
+        (p) => p.category === selectedCategory.value
+      )
+    : props?.products?.productlist;
 
   const sortByPrice = async () => {
     if (ordre === "ASC") {
-      const sorted = [...filterProducts].sort((a, b) =>
-        a.price > b.price ? 1 : -1
-      );
-      setProduct(sorted);
+      props.byPrice(ordre);
       setOrdre("DSC");
     } else {
-      const sorted = [...filterProducts].sort((a, b) =>
-        b.price > a.price ? 1 : -1
-      );
-      setProduct(sorted);
+      props.byPrice(ordre);
       setOrdre("ASC");
     }
+  
   };
 
   const sortByRating = async () => {
     if (ordre === "ASC") {
-      const sorted = [...filterProducts].sort((a, b) =>
-        a.rating.rate > b.rating.rate ? 1 : -1
-      );
-      setProduct(sorted);
+      props.byRating(ordre);
       setOrdre("DSC");
     } else {
-      const sorted = [...filterProducts].sort((a, b) =>
-        b.reting.rate > a.rating.rate ? 1 : -1
-      );
-      setProduct(sorted);
+      props.byRating(ordre);
       setOrdre("ASC");
     }
   };
 
   const sortByName = async () => {
     if (ordre === "ASC") {
-      const sorted = [...filterProducts].sort((a, b) =>
-        a.title.toLowerCase().localeCompare(b.title.toLowerCase())
-      );
-      setProduct(sorted);
+      props.byName(ordre);
       setOrdre("DSC");
     } else {
-      const sorted = [...filterProducts].sort((a, b) =>
-        b.title.toLowerCase().localeCompare(a.title.toLowerCase())
-      );
-      setProduct(sorted);
+      props.byName(ordre);
       setOrdre("ASC");
     }
   };
 
   const deleteProduct = async (productId) => {
-    setLoading(true);
-    fetch(`${process.env.REACT_APP_API_URL}/products/${productId}`, {
-      method: "DELETE",
-    })
-      .then((response) => {
-        if (response.ok) {
-          SuccessNotify("Supprimé avec succès");
-          setLoading(false);
-          return response.json();
-        }
-        throw new Error("Something went wrong");
-      })
-      .catch((error) => {
-        ErrorNotify(error);
-        console.error(error);
-      }).finally(()=>{
-        setLoading(false);
-      });
+    if (window.confirm("supprimer le produit ?")) {
+      props.removeproduct(productId);
+      props.loadproduct();
+      SuccessNotify("Supprimé avec succès");
+    }
   };
-
-  useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_URL}/products`)
-      .then((response) => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw new Error("Something went wrong");
-      })
-      /* .then((data) => {
-        const response = data.sort((a, b) =>
-          a.title.toLowerCase().localeCompare(b.title.toLowerCase())
-        );
-        return response;
-      })*/
-      .then((data) => {
-        setProduct(data);
-        setRecords(data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        ErrorNotify(error);
-        console.error(error);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
 
   return (
     <div className="container-fluid">
@@ -138,11 +78,9 @@ export default function ProductListPage() {
           <h6 className="m-0 font-weight-bold text-primary">
             Liste des Produits
           </h6>
-
         </div>
 
-
-        {loading ? (
+        {props.products.loading ? (
           <Loading
             type={"spokes"}
             color={"#4e73df"}
@@ -150,11 +88,9 @@ export default function ProductListPage() {
             height={"20%"}
             className={"4e73df"}
           />
-        ) : (null
-        )}
-
-        {filterProducts.length >0  ? (
-          
+        ) : props.products.errmessage ? (
+          <div className="text-danger">{props.products.errmessage}</div>
+        ) : (
           <div>
             <form className="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search py-2">
               <div className="input-group">
@@ -169,14 +105,16 @@ export default function ProductListPage() {
                 <Select
                   isClearable
                   placeholder="Select a category"
-                  options={categoryOptions}
+                  options={props?.products.categorielist}
                   onChange={(selectOption) => setSelectedCategory(selectOption)}
                   value={selectedCategory}
                   className="mx-5"
                 />
               </div>
             </form>
-            <Link className="btn btn-primary" to={"/products/add"} >Ajouter Produit</Link>
+            <Link className="btn btn-primary" to={"/product/add"}>
+              Ajouter Produit
+            </Link>
 
             <div className="card-body">
               <div className="table-responsive">
@@ -192,11 +130,30 @@ export default function ProductListPage() {
               </div>
             </div>
           </div>
-        ):(
-          <div>la liste est vide</div>
         )}
       </div>
       <ToastContainer />
     </div>
   );
-}
+};
+
+const mapStateToProps = (state) => {
+  return {
+    products: state.products,
+    loading: state.loading,
+    error: state.error,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    loadproduct: () => dispatch(fetchProducts()),
+    loadcategories: () => dispatch(fetchcategories()),
+    removeproduct: (id) => dispatch(removeProduct(id)),
+    byPrice: (ordre) => dispatch(sortByPrice(ordre)),
+    byName: (ordre) => dispatch(sortName(ordre)),
+    byRating: (ordre) => dispatch(sortByRating(ordre)),
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductListPage);

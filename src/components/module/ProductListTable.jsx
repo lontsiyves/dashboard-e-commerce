@@ -13,13 +13,13 @@ export default function ProductListTable({
 }) {
   const [currentPage, setCurrentPage] = useState(1);
 
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const totalPages = Math.ceil(data?.length / itemsPerPage);
 
   const indexOfLastItem = currentPage * itemsPerPage;
 
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = data?.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -52,7 +52,7 @@ export default function ProductListTable({
         </thead>
         <tbody>
           {currentItems
-            .filter((item) => {
+            ?.filter((item) => {
               return search.toLowerCase() === ""
                 ? item
                 : item.title.toLowerCase().includes(search);
@@ -69,7 +69,7 @@ export default function ProductListTable({
 
                   <td>
                     {" "}
-                    <Link to={`/products/${item.id}/edit`}>
+                    <Link to={`/products/edit/${item.id}`}>
                       <i className="fas fa-fw fa-edit" />{" "}
                     </Link>
                     <span

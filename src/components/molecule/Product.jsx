@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import StarRating from "../atoms/StarRating";
 import React from "react";
 
 export default function Product({ prop }) {
@@ -40,7 +39,7 @@ export default function Product({ prop }) {
           </div>
         </div>
       </div>
-     <div className="mx-3 py-3"> <Link className="btn btn-primary" to={`/products/${prop.id}/edit`} >
+     <div className="mx-3 py-3"> <Link className="btn btn-primary" to={`/products/edit/${prop.id}`} >
         Editer
       </Link></div>
     </div>
