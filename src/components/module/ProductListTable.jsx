@@ -61,7 +61,7 @@ export default function ProductListTable({
               return (
                 <tr key={index}>
                   <td>
-                    <Link to={`/products/${item.id}`}>{item.title}</Link>
+                    <Link to={`/dashboard/products/${item.id}`}>{item.title}</Link>
                   </td>
                   <td>{item.category}</td>
                   <td>{item.price}</td>
@@ -69,7 +69,7 @@ export default function ProductListTable({
 
                   <td>
                     {" "}
-                    <Link to={`/products/edit/${item.id}`}>
+                    <Link to={`/dashboard/products/edit/${item.id}`}>
                       <i className="fas fa-fw fa-edit" />{" "}
                     </Link>
                     <span

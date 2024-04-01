@@ -2,6 +2,7 @@ import React from "react";
 import Header from "../Partial/Header";
 import Footer from "../Partial/Footer";
 import SideNavBar from "../Partial/SideNavBar";
+import {Outlet} from "react-router-dom" 
 
 export default function MainLayout({ children }) {
   return (
@@ -11,7 +12,7 @@ export default function MainLayout({ children }) {
         <div id="content-wrapper" className="d-flex flex-column">
           <div id="content">
             <Header />
-            {children}
+            <Outlet />
             <Footer />
           </div>
         </div>

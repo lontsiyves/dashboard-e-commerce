@@ -16,7 +16,7 @@ export default function LoginForm() {
   const onSubmit = (values, { setSubmitting }) => {
     console.log(values);
     dispatch(LoginUser(values));
-    navigate("/dashboad");
+    //  navigate("/dashboad");
 
     setSubmitting(false);
   };
@@ -36,7 +36,7 @@ export default function LoginForm() {
   };
 
   return (
-    <div>
+    <div className="user">
       <h2>Login</h2>
       <Formik
         initialValues={initialValues}
@@ -45,57 +45,41 @@ export default function LoginForm() {
       >
         {({ isSubmitting }) => (
           <Form>
-            <div className="container">
-              <div className="row justify-content-center">
-                <div className="col-xl-10 col-lg-12 col-md-9">
-                  <div className="card o-hidden border-0 shadow-lg my-5">
-                    <div className="card-body p-0">
-                      <div className="">
-                        <div>
-                          <div className="p-5">
-                            <div className="form-group">
-                              <label htmlFor="username">Nom Utilisateur</label>
-                              <Field
-                                type="text"
-                                name="username"
-                                className="form-control form-control-user"
-                              />
-                              <ErrorMessage
-                                name="username"
-                                component="div"
-                                className="text-danger"
-                              />
-                            </div>
-
-                            <div className="form-group">
-                              <label htmlFor="password">Mot de Passe</label>
-                              <Field
-                                type="password"
-                                name="password"
-                                className="form-control form-control-user"
-                              />
-                              <ErrorMessage
-                                name="password"
-                                component="div"
-                                className="text-danger"
-                              />
-                            </div>
-
-                            <button
-                              className="btn btn-primary btn-user"
-                              type="submit"
-                              disabled={isSubmitting}
-                            >
-                              Submit
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className="form-group">
+              <label htmlFor="username">Nom utilisateur</label>
+              <Field
+                type="text"
+                name="username"
+                className="form-control form-control-user"
+              />
+              <ErrorMessage
+                name="username"
+                component="div"
+                className="text-danger"
+              />
             </div>
+
+            <div className="form-group">
+              <label htmlFor="password">Mot de Passe</label>
+              <Field
+                type="password"
+                name="password"
+                className="form-control form-control-user"
+              />
+              <ErrorMessage
+                name="password"
+                component="div"
+                className="text-danger"
+              />
+            </div>
+
+            <button
+              className="btn btn-primary btn-user"
+              type="submit"
+              disabled={isSubmitting}
+            >
+              Submit
+            </button>
           </Form>
         )}
       </Formik>

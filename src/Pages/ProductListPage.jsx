@@ -17,6 +17,11 @@ const ProductListPage = (props) => {
   useEffect(() => {
     props.loadcategories();
   }, []);
+  useEffect(()=> {
+    const data = fetch('https://fakestoreapi.com/users/')
+            .then(res=>res.json())
+            .then(json=>console.log("USER",json))
+  })
 
   const [products, setProduct] = useState(props.products.productlist);
 

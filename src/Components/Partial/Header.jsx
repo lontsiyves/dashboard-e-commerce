@@ -49,7 +49,7 @@ export default function Header() {
         <li className="nav-item dropdown no-arrow">
           <a
             className="nav-link dropdown-toggle"
-            href="#"
+            href="/dashboard/"
             id="userDropdown"
             role="button"
             data-toggle="dropdown"

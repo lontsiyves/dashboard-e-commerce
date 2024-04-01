@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function SideNavBar() {
   return (
@@ -8,20 +9,13 @@ export default function SideNavBar() {
     >
       <a
         className="sidebar-brand d-flex align-items-center justify-content-center"
-        href="/"
+        href="/dashboard/"
       >
         <div className="sidebar-brand-icon rotate-n-15">
           <i className="fas fa-laugh-wink" />
         </div>
         <div className="sidebar-brand-text mx-3">E commerce</div>
       </a>
-      <hr className="sidebar-divider my-0" />
-      <li className="nav-item active">
-        <a className="nav-link" href="index.html">
-          <i className="fas fa-fw fa-tachometer-alt" />
-          <span>Dashboard</span>
-        </a>
-      </li>
       <hr className="sidebar-divider" />
       <li className="nav-item">
         <a
@@ -41,13 +35,17 @@ export default function SideNavBar() {
           aria-labelledby="headingPages"
           data-parent="#accordionSidebar"
         >
-          <div className="bg-white py-2 collapse-inner rounded">
-            <a className="collapse-item" href="/products">
-              Liste
-            </a>
-            <a className="collapse-item" href="/product/add">
-              Ajouter
-            </a>
+          <div className="bg-white py-2 px-2 collapse-inner rounded">
+            <div className="py-2">
+              <Link to={`/dashboard/product`}>
+                <i className="fas fa-fw fa-list" /> Liste
+              </Link>
+            </div>
+            <div className="py-2">
+              <Link to={`/dashboard/product/add`}>
+                <i className="fas fa-fw fa-plus" /> Ajouter
+              </Link>
+            </div>
           </div>
         </div>
       </li>

@@ -376,6 +376,10 @@ export const AddUser = (user) => {
 };*/
 
 export const LoginUser = (user) => {
+  console.log(JSON.stringify({
+    username: `${user.username}`,
+            password : `${user.password}`,
+  }))
   return async (dispatch) => {
     dispatch(makeRequest());
     try {
@@ -384,13 +388,13 @@ export const LoginUser = (user) => {
         {
           method: "POST",
           body: JSON.stringify({
-            username: user.username,
-            password: user.password,
+            username: `${user.username}`,
+            password : `${user.password}`,
           }),
         }
       );
       const data = await response.json();
-      console.log("user: ", data);
+      console.log(data);
       dispatch(loginuser());
       SuccessNotify("Login avec succès");
     } catch (error) {
