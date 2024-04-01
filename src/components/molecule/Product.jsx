@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import StarRating from "./StarRating";
 import React from "react";
 
 export default function Product({ prop }) {
@@ -25,22 +24,24 @@ export default function Product({ prop }) {
         <div className="row d-flex justify-content-center pt-4">
           <div className="col-6">
             <div>
-              <StarRating rating={prop.rating.rate} />
+             { /*<StarRating rating={prop.rating.rate} />*/}
             </div>
             <div className="d-flex row">
-              <div className="col-6">{prop.rating.rate}/5 </div>
+              <div className='col-6'><span className="font-weight-bold">Note:</span><span  className={prop.rating.rate>2.5 ? 'text-info' : 'text-danger'}>{prop.rating.rate} / 5</span> </div>
               <div className="col-6"> {prop.rating.count} Vote(s)</div>
             </div>
           </div>
           <div className="col-6 font-weight-bold ">
+            <h4>
             PRIX:{" "}
             <span className="font-weight-bold text-primary">{prop.price}</span>
+            </h4>
           </div>
         </div>
       </div>
-      <Link className="btn btn-primary" to={`/products/${prop.id}/edit`} >
+     <div className="mx-3 py-3"> <Link className="btn btn-primary" to={`/products/edit/${prop.id}`} >
         Editer
-      </Link>
+      </Link></div>
     </div>
   );
 }

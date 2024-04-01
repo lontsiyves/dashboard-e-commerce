@@ -26,7 +26,7 @@ export default function SideNavBar() {
       <li className="nav-item">
         <a
           className="nav-link collapsed"
-          href="#"
+          href="/login"
           data-toggle="collapse"
           data-target="#collapseproductPages"
           aria-expanded="true"
@@ -45,7 +45,7 @@ export default function SideNavBar() {
             <a className="collapse-item" href="/products">
               Liste
             </a>
-            <a className="collapse-item" href="/products/add">
+            <a className="collapse-item" href="/product/add">
               Ajouter
             </a>
           </div>
