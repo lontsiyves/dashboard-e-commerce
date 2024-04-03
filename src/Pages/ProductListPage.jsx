@@ -117,7 +117,7 @@ const ProductListPage = (props) => {
                 />
               </div>
             </form>
-            <Link className="btn btn-primary" to={"/product/add"}>
+            <Link className="btn btn-primary" to={"/dashboard/product/add"}>
               Ajouter Produit
             </Link>
 

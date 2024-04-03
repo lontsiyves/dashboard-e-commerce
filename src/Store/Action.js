@@ -376,10 +376,6 @@ export const AddUser = (user) => {
 };*/
 
 export const LoginUser = (user) => {
-  console.log(JSON.stringify({
-    username: `${user.username}`,
-            password : `${user.password}`,
-  }))
   return async (dispatch) => {
     dispatch(makeRequest());
     try {
@@ -394,7 +390,6 @@ export const LoginUser = (user) => {
         }
       );
       const data = await response.json();
-      console.log(data);
       dispatch(loginuser());
       SuccessNotify("Login avec succès");
     } catch (error) {

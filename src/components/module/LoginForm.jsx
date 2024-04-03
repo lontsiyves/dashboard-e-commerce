@@ -1,88 +1,59 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { LoginUser } from "../../Store/Action";
-import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import * as Yup from "yup";
 
-export default function LoginForm() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-
-  const initialValues = {
-    username: "",
-    password: "",
-  };
-
-  const onSubmit = (values, { setSubmitting }) => {
-    console.log(values);
-    dispatch(LoginUser(values));
-    //  navigate("/dashboad");
-
-    setSubmitting(false);
-  };
-
-  const validate = (values) => {
-    const errors = {};
-
-    if (!values.username) {
-      errors.username = "Required";
-    }
-
-    if (!values.password) {
-      errors.password = "Required";
-    }
-
-    return errors;
-  };
-
+const LoginForm = ({ onSubmit }) => {
   return (
-    <div className="user">
-      <h2>Login</h2>
+    <div>
+      <h1>Login</h1>
       <Formik
-        initialValues={initialValues}
-        validate={validate}
-        onSubmit={onSubmit}
+        initialValues={{ username: "", password: "" }}
+        validationSchema={Yup.object({
+          username: Yup.string().required("Requis"),
+          password: Yup.string().required("Requis"),
+        })}
+        onSubmit={(values, { setSubmitting }) => {
+          onSubmit(values); 
+          setSubmitting(false);
+        }}
       >
-        {({ isSubmitting }) => (
-          <Form>
-            <div className="form-group">
-              <label htmlFor="username">Nom utilisateur</label>
-              <Field
-                type="text"
-                name="username"
-                className="form-control form-control-user"
-              />
-              <ErrorMessage
-                name="username"
-                component="div"
-                className="text-danger"
-              />
-            </div>
-
-            <div className="form-group">
-              <label htmlFor="password">Mot de Passe</label>
-              <Field
-                type="password"
-                name="password"
-                className="form-control form-control-user"
-              />
-              <ErrorMessage
-                name="password"
-                component="div"
-                className="text-danger"
-              />
-            </div>
-
-            <button
-              className="btn btn-primary btn-user"
-              type="submit"
-              disabled={isSubmitting}
-            >
-              Submit
+        <Form>
+          <div>
+            <label htmlFor="username">Nom utilisateur</label>
+            <Field
+              type="text"
+              name="username"
+              id="username"
+              className="form-control form-control-user"
+            />
+            <ErrorMessage
+              name="username"
+              component="div"
+              className="text-danger"
+            />
+          </div>
+          <div>
+            <label htmlFor="password">Mot de passe</label>
+            <Field
+              type="password"
+              name="password"
+              id="password"
+              className="form-control form-control-user"
+            />
+            <ErrorMessage
+              name="password"
+              component="div"
+              className="text-danger"
+            />
+          </div>
+          <div className="my-3">
+            <button className="btn btn-primary btn-user" type="submit">
+              Enregistrer
             </button>
-          </Form>
-        )}
+          </div>
+        </Form>
       </Formik>
     </div>
   );
-}
+};
+export default LoginForm;

@@ -4,7 +4,9 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
 const AddProductForm = ({ categories, onSubmit }) => {
-  const [selectedCategory, setSelectedCategory] = useState(categories[0]?.value);
+  const [selectedCategory, setSelectedCategory] = useState(
+    categories[0]?.value
+  );
 
   const defaultCategoryValue = {
     value: selectedCategory,
