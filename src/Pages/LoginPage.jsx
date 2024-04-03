@@ -16,24 +16,17 @@ export default function LoginPage() {
   const handleSave = async (userCredentials) => {
     setLoading(true);
     const { username, password } = userCredentials;
-    const da = {
-      username: userCredentials.username,
-      password: userCredentials.password,
-    };
 
     try {
       fetch(`${process.env.REACT_APP_API_URL}/auth/login`, {
         method: "POST",
-        contentType: "application/json",
         body: JSON.stringify({ username, password }),
       })
         .then((response) => {
-          localStorage.setItem("token", "token");
-
           console.log("response: ", response);
           if (response.ok) {
             setToken(response.json());
-            localStorage.setItem("token", "token");
+            localStorage.setItem("token", token);
             SuccessNotify("Connexion réussie");
             navigate("/dashboard/");
           } else {
