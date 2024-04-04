@@ -1,7 +1,8 @@
 import Footer from "../components/Partial/Footer";
 import LoginForm from "../components/module/LoginForm";
 import { useNavigate } from "react-router-dom";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 import Loading from "../components/atoms/Loading";
 import { SuccessNotify, ErrorNotify } from "../lib/notify";
@@ -11,38 +12,52 @@ export default function LoginPage() {
 
   const [token, setToken] = useState("");
 
+  const [error, setError] = useState("");
+
   const navigate = useNavigate();
 
   const handleSave = async (userCredentials) => {
-    setLoading(true);
     const { username, password } = userCredentials;
 
-    try {
-      fetch(`${process.env.REACT_APP_API_URL}/auth/login`, {
-        method: "POST",
-        body: JSON.stringify({ username, password }),
-      })
-        .then((response) => {
-          console.log("response: ", response);
-          if (response.ok) {
-            setToken(response.json());
-            localStorage.setItem("token", token);
-            SuccessNotify("Connexion réussie");
-            navigate("/dashboard/");
-          } else {
-            ErrorNotify("une erreur est survenue");
-          }
-        })
-        .finally(() => {
+    setLoading(true);
+
+    axios({
+      url: `${process.env.REACT_APP_API_URL}/auth/login`,
+      method: "POST",
+      data: {
+        username: username,
+        password: password,
+      },
+    })
+      .then((response) => {
+        console.log("response: ", response);
+        if (response.data?.token) {
+          setToken(response?.data?.token);
+          localStorage.setItem("token", response?.data?.token);
+          SuccessNotify("Connexion réussie");
+          navigate("/dashboard/");
           setLoading(false);
-        });
-    } catch (error) {
-      ErrorNotify("une erreur est survenue");
-    }
+        } else {
+          setError(response?.data);
+          ErrorNotify(response?.data);
+        }
+      })
+      .catch((error) => {
+        console.log("error: ", error);
+
+        if (error.code === "ERR_NETWORK") {
+          setError(error.message);
+        } else if (error.code === "ERR_BAD_REQUEST") {
+          setError(error.response.data);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
   return (
     <div>
-      <div className="container">
+      <div className="container login-page">
         <div className="row justify-content-center">
           <div className="col-xl-10 col-lg-12 col-md-9">
             <div className="card o-hidden border-0 shadow-lg my-5">
@@ -54,16 +69,13 @@ export default function LoginPage() {
                       <div className="text-center">
                         <h1 className="h4 text-gray-900 mb-4">Bienvenue !</h1>
                       </div>
-                      {loading ? (
-                        <Loading
-                          type={"spokes"}
-                          color={"#4e73df"}
-                          width={"20%"}
-                          height={"20%"}
-                        />
-                      ) : (
-                        <LoginForm onSubmit={handleSave} />
-                      )}
+                        {
+                          <>
+                            {loading? <Loading />: (null)}
+                            <LoginForm onSubmit={handleSave} />
+                            <p className="text-danger">{error}</p>
+                          </>
+                        }
                     </div>
                   </div>
                 </div>

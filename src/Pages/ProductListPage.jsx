@@ -14,17 +14,20 @@ const ProductListPage = (props) => {
   useEffect(() => {
     props.loadproduct();
   }, []);
+
   useEffect(() => {
     props.loadcategories();
   }, []);
+
+  /*
   useEffect(()=> {
     const data = fetch('https://fakestoreapi.com/users/')
             .then(res=>res.json())
             .then(json=>console.log("USER",json))
   })
-
+*/
   const [products, setProduct] = useState(props.products.productlist);
-
+console.log(props.products.categorielist)
   const [ordre, setOrdre] = useState("ASC");
 
   const [search, setSearch] = useState("");
@@ -110,7 +113,7 @@ const ProductListPage = (props) => {
                 <Select
                   isClearable
                   placeholder="Select a category"
-                  options={props?.products.categorielist}
+                  options={props.products.categorielist}
                   onChange={(selectOption) => setSelectedCategory(selectOption)}
                   value={selectedCategory}
                   className="mx-5"

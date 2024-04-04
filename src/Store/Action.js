@@ -92,7 +92,7 @@ export const fetchProducts = () => {
         data = await response.json();
       }
 
-      dispatch(getProductList(data));
+      await dispatch(getProductList(data));
     } catch (error) {
       dispatch(failRequest(error.message));
     }
@@ -222,12 +222,12 @@ export const fetchcategories = () => {
         );
         data = await response.json();
 
-        const categoryOptions = data.map((category) => ({
+        const categoryOptions = await data.map((category) => ({
           value: category,
           label: category,
         }));
 
-        dispatch(getCategoriesList(categoryOptions));
+       await dispatch(getCategoriesList(categoryOptions));
       }
     } catch (error) {
       dispatch(failRequest(error.message));
