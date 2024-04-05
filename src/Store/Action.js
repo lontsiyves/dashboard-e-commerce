@@ -92,7 +92,7 @@ export const fetchProducts = () => {
         data = await response.json();
       }
 
-      dispatch(getProductList(data));
+      await dispatch(getProductList(data));
     } catch (error) {
       dispatch(failRequest(error.message));
     }
@@ -222,12 +222,12 @@ export const fetchcategories = () => {
         );
         data = await response.json();
 
-        const categoryOptions = data.map((category) => ({
+        const categoryOptions = await data.map((category) => ({
           value: category,
           label: category,
         }));
 
-        dispatch(getCategoriesList(categoryOptions));
+        await dispatch(getCategoriesList(categoryOptions));
       }
     } catch (error) {
       dispatch(failRequest(error.message));
@@ -236,32 +236,8 @@ export const fetchcategories = () => {
 };
 
 export const fetchProduct = (id) => {
-  return async (dispatch, getState) => {
+  return async (dispatch) => {
     dispatch(makeRequest());
-    /*   try {
-      let data;
-      if (
-        getState().products?.productlist &&
-        getState().products?.productlist?.length > 0
-      ) {
-        const response = await getState().products.productlist;
-        //data = response;
-        if(response.length > 0 ) {
-          const sorted = await response.find((item) => item.id === id);
-          dispatch(getProduct(sorted));
-        }
-       
-      } else {
-        const response = await fetch(
-          `${process.env.REACT_APP_API_URL}/products/${id}`
-        );
-        data = await response.json();
-        dispatch(getProduct(data));
-      }
-    } catch (error) {
-      dispatch(failRequest(error.message));
-    }
-*/
 
     try {
       const response = await fetch(
@@ -366,7 +342,6 @@ export const AddUser = (user) => {
         }),
       });
       const data = await response.json();
-      console.log("user: ", data);
       dispatch(adduser());
       SuccessNotify("Ajouter avec succès");
     } catch (error) {
@@ -383,14 +358,13 @@ export const LoginUser = (user) => {
         `${process.env.REACT_APP_API_URL}/auth/login`,
         {
           method: "POST",
-          body: JSON.stringify({
-            username: user.username,
-            password: user.password,
-          }),
+          body: {
+            "username": `${user.username}`,
+            "password" : `${user.password}`,
+          },
         }
       );
       const data = await response.json();
-      console.log("user: ", data);
       dispatch(loginuser());
       SuccessNotify("Login avec succès");
     } catch (error) {

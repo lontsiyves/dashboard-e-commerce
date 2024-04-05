@@ -7,19 +7,26 @@ import { connect } from "react-redux";
 import ProductListTable from "../components/module/ProductListTable";
 import Loading from "../components/atoms/Loading";
 import { SuccessNotify } from "../lib/notify";
-import {  } from "react-redux";
-import { fetchProducts, removeProduct, fetchcategories,sortByPrice ,sortByRating,sortName} from "../Store/Action";
+import {} from "react-redux";
+import {
+  fetchProducts,
+  removeProduct,
+  fetchcategories,
+  sortByPrice,
+  sortByRating,
+  sortName,
+} from "../Store/Action";
 
 const ProductListPage = (props) => {
   useEffect(() => {
     props.loadproduct();
   }, []);
+
   useEffect(() => {
     props.loadcategories();
   }, []);
 
   const [products, setProduct] = useState(props.products.productlist);
-
   const [ordre, setOrdre] = useState("ASC");
 
   const [search, setSearch] = useState("");
@@ -40,7 +47,7 @@ const ProductListPage = (props) => {
       props.byPrice(ordre);
       setOrdre("ASC");
     }
-  
+    await props.loadcategories();
   };
 
   const sortByRating = async () => {
@@ -51,6 +58,7 @@ const ProductListPage = (props) => {
       props.byRating(ordre);
       setOrdre("ASC");
     }
+    await props.loadcategories();
   };
 
   const sortByName = async () => {
@@ -61,6 +69,7 @@ const ProductListPage = (props) => {
       props.byName(ordre);
       setOrdre("ASC");
     }
+    await props.loadcategories();
   };
 
   const deleteProduct = async (productId) => {
@@ -105,14 +114,14 @@ const ProductListPage = (props) => {
                 <Select
                   isClearable
                   placeholder="Select a category"
-                  options={props?.products.categorielist}
+                  options={props.products.categorielist}
                   onChange={(selectOption) => setSelectedCategory(selectOption)}
                   value={selectedCategory}
                   className="mx-5"
                 />
               </div>
             </form>
-            <Link className="btn btn-primary" to={"/product/add"}>
+            <Link className="btn btn-primary" to={"/dashboard/product/add"}>
               Ajouter Produit
             </Link>
 

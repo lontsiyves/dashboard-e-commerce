@@ -29,7 +29,7 @@ const ProductEditPage = (props) => {
     dispatch(
       FunctionUpdateProduct({ title, price, description, image, category }, id)
     );
-    navigate("/product");
+    navigate("/dashboard/product");
   };
 
   return (

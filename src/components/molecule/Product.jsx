@@ -39,7 +39,7 @@ export default function Product({ prop }) {
           </div>
         </div>
       </div>
-     <div className="mx-3 py-3"> <Link className="btn btn-primary" to={`/products/edit/${prop.id}`} >
+     <div className="mx-3 py-3"> <Link className="btn btn-primary" to={`/dashboard/product/edit/${prop.id}`} >
         Editer
       </Link></div>
     </div>

@@ -19,11 +19,12 @@ const AddProductPge = (props) => {
   const navigate = useNavigate();
 
   const handleAddProduct = ({ title, price, description, image, category }) => {
+    console.log("CALLLL")
 
     dispatch(
       FunctionAddProduct({ title, price, description, image, category })
     );
-    navigate("/product");
+    navigate("/dashboard/product");
   };
 
   return (
@@ -31,7 +32,7 @@ const AddProductPge = (props) => {
       <div>
         <h2>Ajouter un produit</h2>
         <AddProductForm
-          categories={props.products.categorielist}
+          categories={props.products?.categorielist}
           onSubmit={handleAddProduct}
         />
       </div>
