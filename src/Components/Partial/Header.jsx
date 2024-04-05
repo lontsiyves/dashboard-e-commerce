@@ -81,8 +81,8 @@ export default function Header() {
               href="/"
               onClick={handleLogout}
             >
-              <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400" />
-              Logout
+              <i className="fas fa-sign-alt fa-sm fa-fw mr-2 text-gray-400" />
+              Déconnexion
             </a>
           </div>
         </li>

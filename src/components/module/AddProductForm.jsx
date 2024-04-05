@@ -12,26 +12,26 @@ const AddProductForm = ({ categories, onSubmit }) => {
     value: selectedCategory,
     label: selectedCategory,
   };
-
   return (
     <Formik
       initialValues={{
         title: "",
-        description: "",
-        price: "",
         category: "",
+        description: "",
         image: "",
+        price: 0,
       }}
       validationSchema={Yup.object({
-        title: Yup.string().required("Requis"),
-        category: Yup.string().required("Requis"),
-        description: Yup.string().required("Requis"),
-        image: Yup.mixed().required("Requis"),
+        title: Yup.string().required("Ce champ est obligatoire"),
+        category: Yup.string(),
+        description: Yup.string().required("Ce champ est obligatoire"),
+        image: Yup.string().required("Ce champ est obligatoire"),
         price: Yup.number()
-          .required("Requis")
-          .positive("Doit être un nombre positif"),
+          .positive("Doit être un nombre positif")
+          .required("Ce champ est obligatoire"),
       })}
       onSubmit={(values, { resetForm }) => {
+        console.log("values: ", values);
         onSubmit(values);
         resetForm();
       }}
@@ -51,8 +51,8 @@ const AddProductForm = ({ categories, onSubmit }) => {
               <div className="col-xl-10 col-lg-12 col-md-9">
                 <div className="card o-hidden border-0 shadow-lg my-5">
                   <div className="card-body p-0">
-                    <div className="">
-                      <div>
+                    <div className="row">
+                      <div className="col">
                         <div className="p-5">
                           <div className="form-group">
                             <label htmlFor="title">Titre:</label>
@@ -91,6 +91,7 @@ const AddProductForm = ({ categories, onSubmit }) => {
                               setSelectedCategory(selectOption)
                             }
                             options={categories}
+                            value={selectedCategory}
                             className="w-100 mx-0 mb-4"
                           />
 
@@ -135,7 +136,13 @@ const AddProductForm = ({ categories, onSubmit }) => {
                           <div className="my-3">
                             <button
                               className="btn btn-primary btn-user"
+                              loading={isSubmitting}
+                              disabled={!isValid || !dirty || isSubmitting}
                               type="submit"
+                              fluidsize="large"
+                              color="teal"
+                              content="Submit"
+                              onClick={submitForm}
                             >
                               Enregistrer
                             </button>

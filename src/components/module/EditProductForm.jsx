@@ -23,12 +23,12 @@ const EditProductForm = ({ product, categories, onSubmit }) => {
         image,
       }}
       validationSchema={Yup.object({
-        title: Yup.string().required("Requis"),
-        category: Yup.string().required("Requis"),
-        description: Yup.string().required("Requis"),
-        image: Yup.mixed().required("Requis"),
+        title: Yup.string().required("Ce champ est obligatoire"),
+        category: Yup.string().required("Ce champ est obligatoire"),
+        description: Yup.string().required("Ce champ est obligatoire"),
+        image: Yup.mixed().required("Ce champ est obligatoire"),
         price: Yup.number()
-          .required("Requis")
+          .required("Ce champ est obligatoire")
           .positive("Doit être un nombre positif"),
       })}
       onSubmit={(values, { resetForm }) => {
@@ -91,6 +91,7 @@ const EditProductForm = ({ product, categories, onSubmit }) => {
                               setSelectedCategory(selectOption)
                             }
                             options={categories}
+                            value={selectedCategory}
                             className="w-100 mx-0 mb-4"
                           />
 

@@ -7,15 +7,14 @@ export default function SideNavBar() {
       className="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
       id="accordionSidebar"
     >
-      <a
-        className="sidebar-brand d-flex align-items-center justify-content-center"
-        href="/dashboard/"
-      >
+      <div className="sidebar-brand d-flex align-items-center justify-content-center">
         <div className="sidebar-brand-icon rotate-n-15">
           <i className="fas fa-laugh-wink" />
         </div>
-        <div className="sidebar-brand-text mx-3">E commerce</div>
-      </a>
+        <Link className="sidebar-brand-text mx-3 text-white" to={"/dashboard"}>
+          E commerce
+        </Link>
+      </div>
       <hr className="sidebar-divider" />
       <li className="nav-item">
         <a

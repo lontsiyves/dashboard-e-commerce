@@ -10,6 +10,7 @@ import LoginPage from "./Pages/LoginPage";
 import { Provider } from "react-redux";
 import Store from "./Store/Store";
 import { BrowserRouter } from "react-router-dom";
+import NotFound from "./Pages/NotFound"
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
             <Route path="product/add" element={<AddProductPage />} />
             <Route path="product/:id" element={<ProductDetailPage />} />
             <Route path="product/edit/:id" element={<ProductEditPage />} />
+            <Route element={<NotFound />} />
           </Route>
         </Routes>
       </BrowserRouter>

@@ -1,23 +1,34 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import Loading from "../../components/atoms/Loading";
+
 import * as Yup from "yup";
 
-const LoginForm = ({ onSubmit }) => {
+const LoginForm = ({ onSubmit,loading }) => {
   return (
     <div>
-      <h1>Login</h1>
+      <h1>Connexion</h1>
       <Formik
         initialValues={{ username: "", password: "" }}
         validationSchema={Yup.object({
-          username: Yup.string().required("Requis"),
-          password: Yup.string().required("Requis"),
+          username: Yup.string().required("Ce champ est obligatoire"),
+          password: Yup.string().required("Ce champ est obligatoire"),
         })}
-        onSubmit={(values, { setSubmitting }) => {
-          onSubmit(values); 
+        onSubmit={async (values, { setSubmitting }) => {
+          await onSubmit(values);
           setSubmitting(false);
         }}
       >
         <Form>
+          {loading ? (
+            <Loading
+              type={"spokes"}
+              color={"#4e73df"}
+              width={"20%"}
+              height={"20%"}
+              className={"4e73df"}
+            />
+          ) : null}
           <div>
             <label htmlFor="username">Nom utilisateur</label>
             <Field
@@ -48,7 +59,7 @@ const LoginForm = ({ onSubmit }) => {
           </div>
           <div className="my-3">
             <button className="btn btn-primary btn-user" type="submit">
-              Enregistrer
+              Se connecter
             </button>
           </div>
         </Form>

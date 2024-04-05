@@ -18,19 +18,16 @@ export default function LoginPage() {
 
   const handleSave = async (userCredentials) => {
     const { username, password } = userCredentials;
-
     setLoading(true);
-
     axios({
       url: `${process.env.REACT_APP_API_URL}/auth/login`,
       method: "POST",
       data: {
-        username: username,
-        password: password,
+        username,
+        password,
       },
     })
       .then((response) => {
-        console.log("response: ", response);
         if (response.data?.token) {
           setToken(response?.data?.token);
           localStorage.setItem("token", response?.data?.token);
@@ -40,16 +37,16 @@ export default function LoginPage() {
         } else {
           setError(response?.data);
           ErrorNotify(response?.data);
+          setLoading(false);
         }
       })
       .catch((error) => {
-        console.log("error: ", error);
-
         if (error.code === "ERR_NETWORK") {
           setError(error.message);
         } else if (error.code === "ERR_BAD_REQUEST") {
           setError(error.response.data);
         }
+        setLoading(false);
       })
       .finally(() => {
         setLoading(false);
@@ -57,7 +54,7 @@ export default function LoginPage() {
   };
   return (
     <div>
-      <div className="container login-page">
+      <div className="container">
         <div className="row justify-content-center">
           <div className="col-xl-10 col-lg-12 col-md-9">
             <div className="card o-hidden border-0 shadow-lg my-5">
@@ -69,13 +66,10 @@ export default function LoginPage() {
                       <div className="text-center">
                         <h1 className="h4 text-gray-900 mb-4">Bienvenue !</h1>
                       </div>
-                        {
-                          <>
-                            {loading? <Loading />: (null)}
-                            <LoginForm onSubmit={handleSave} />
-                            <p className="text-danger">{error}</p>
-                          </>
-                        }
+                        <>
+                          <LoginForm loading={loading} onSubmit={handleSave} />
+                          <p className="text-danger">{error}</p>
+                        </>
                     </div>
                   </div>
                 </div>

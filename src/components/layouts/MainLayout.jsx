@@ -30,8 +30,11 @@ export default function MainLayout({ children }) {
               <div id="content">
                 <Header />
                 <Outlet />
+                <div className="position-absolute bottom-0 start-50 translate-middle-x">
                 <Footer />
+                </div>
               </div>
+             
             </div>
           </div>
           <a className="scroll-to-top rounded" href="#page-top">
