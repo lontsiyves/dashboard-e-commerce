@@ -19,7 +19,6 @@ const AddProductPge = (props) => {
   const navigate = useNavigate();
 
   const handleAddProduct = ({ title, price, description, image, category }) => {
-    console.log("CALLLL")
 
     dispatch(
       FunctionAddProduct({ title, price, description, image, category })

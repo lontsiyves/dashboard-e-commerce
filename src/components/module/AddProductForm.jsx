@@ -31,7 +31,6 @@ const AddProductForm = ({ categories, onSubmit }) => {
           .required("Ce champ est obligatoire"),
       })}
       onSubmit={(values, { resetForm }) => {
-        console.log("values: ", values);
         onSubmit(values);
         resetForm();
       }}
