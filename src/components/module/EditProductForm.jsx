@@ -91,7 +91,6 @@ const EditProductForm = ({ product, categories, onSubmit }) => {
                               setSelectedCategory(selectOption)
                             }
                             options={categories}
-                            value={selectedCategory}
                             className="w-100 mx-0 mb-4"
                           />
 
