@@ -5,7 +5,7 @@ export default function Footer() {
     <footer className="sticky-footer">
       <div className="container my-auto">
         <div className="copyright text-center my-auto">
-          <span>&copy; {new Date().getFullYear()} ennov</span>
+          <span>&copy; {new Date().getFullYear()} LONTSI SONTIO YVES DANIEL</span>
         </div>
       </div>
     </footer>
